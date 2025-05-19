@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature and Humidity</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 1.5em;
+            color: #444;
+        }
+    </style>
+    <script>
+        function updateSensorData() {
+            fetch('/sensor-data')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('temperature').innerText = data.error;
+                        document.getElementById('humidity').innerText = '';
+                    } else {
+                        document.getElementById('temperature').innerText = "Temperature: " + data.temperature;
+                        document.getElementById('humidity').innerText = "Humidity: " + data.humidity;
+                    }
+                })
+                .catch(error => console.error('Error fetching sensor data:', error));
+        }
+
+        // Refresh sensor data every 2 seconds
+        setInterval(updateSensorData, 2000);
+        window.onload = updateSensorData;
+    </script>
+</head>
+<body>
+    <h1>Temperature and Humidity</h1>
+    <p id="temperature">Loading...</p>
+    <p id="humidity"></p>
+</body>
+</html>
